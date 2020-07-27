@@ -81,11 +81,11 @@ The default data output rate is 5 Hz at a baudrate of 115200.
 
 1.	Install minicom (mac: http://macappstore.org/minicom/)
 2.	Run “minicom -s”
-    a.	Go to serial port setup
-    b.	Press F (turns off hardware flow control)
-    c.	Press A and enter the appropriate port (go to /dev, see which device appears and disappears when you plug/unplug device, mine looks like: tty.usbserial-D307LICF)
-    d.	Press enter to return to the main window
-    e.	Go to exit, press enter
+    * Go to serial port setup
+    * Press F (turns off hardware flow control)
+    * Press A and enter the appropriate port (go to /dev, see which device appears and disappears when you plug/unplug device, mine looks like: tty.usbserial-D307LICF)
+    * Press enter to return to the main window
+    * Go to exit, press enter
 3.	You should see data streaming
 4.	To change settings, hit ctrl c, brings you to a “>” command prompt, run the following commands to save calibration:
     * show all
