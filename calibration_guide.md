@@ -95,7 +95,7 @@ The default data output rate is 5 Hz at a baudrate of 115200.
     * decimals V 3
     * decimals S 3
     * decimals S2D 3
-    * outputrate 20
+    * outputrate 10
     * nvwrite
 
     * calibrate temp rh
