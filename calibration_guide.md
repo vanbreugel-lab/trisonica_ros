@@ -88,7 +88,8 @@ The default data output rate is 5 Hz at a baudrate of 115200.
     * Go to exit, press enter
 3.	You should see data streaming
 4.	To change settings, hit ctrl c, brings you to a “>” command prompt, run the following commands to save calibration:
-    * show all
+    * hide all
+    * show S S2D D DV U V W T RH Heading TrueHead LevelX LevelY LevelZ
     * decimals U 3
     * decimals W 3
     * decimals V 3
