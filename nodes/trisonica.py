@@ -7,8 +7,9 @@ from optparse import OptionParser
 from trisonica_ros.msg import trisonica_msg
 
 class Trisonica(object):
-    def __init__(self, port="/dev/ttyUSB0", topic='/trisonica'):
+    def __init__(self, port="/dev/ttyUSB0", topic='/trisonica', baud=115200, rate=80):
         baud = 115200
+        self.rate = 80 # rate to check/publish new data, Hz
         print('Connecting to: ', port)
         self.connection = serial.Serial(port, baud, timeout=0.01)
         self.connection.flush()
@@ -17,7 +18,7 @@ class Trisonica(object):
 
     def main(self):
         msg = trisonica_msg()
-        rate = rospy.Rate(80) # Hz, trisonica set to 40 Hz
+        rate = rospy.Rate(self.rate) # Hz, trisonica set to 40 Hz
         while not rospy.is_shutdown():
             data = self.connection.readline()
             if data is not None and len(data) > 10:
@@ -133,10 +134,16 @@ if __name__ == '__main__':
                         help="port to which trisonica is connected")
     parser.add_option("--topic", type="str", dest="topic", default='/trisonica',
                         help="rostopic to publish to")
+    parser.add_option("--rate", type="int", dest="rate", default=80,
+                        help="ROS rate to check for data and publish")
+    parser.add_option("--baud", type="int", dest="baud", default=11520,
+                        help="baudrate")
+    parser.add_option("--nodename", type="str", dest="nodename", default='trisonica',
+                        help="name of the node")
 
     (options, args) = parser.parse_args()
 
-    rospy.init_node('trisonica', anonymous=True)
+    rospy.init_node(options.nodename, anonymous=True)
 
-    trisonica = Trisonica(port=options.port, topic='/trisonica')
+    trisonica = Trisonica(port=options.port, topic=options.topic, baud=options.baud, rate=options.rate)
     trisonica.main()
