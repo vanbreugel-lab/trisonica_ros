@@ -136,7 +136,7 @@ if __name__ == '__main__':
                         help="rostopic to publish to")
     parser.add_option("--rate", type="int", dest="rate", default=80,
                         help="ROS rate to check for data and publish")
-    parser.add_option("--baud", type="int", dest="baud", default=11520,
+    parser.add_option("--baud", type="int", dest="baud", default=115200,
                         help="baudrate")
     parser.add_option("--nodename", type="str", dest="nodename", default='trisonica',
                         help="name of the node")
