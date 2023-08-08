@@ -7,20 +7,46 @@ from optparse import OptionParser
 from trisonica_ros.msg import trisonica_msg
 
 class Trisonica(object):
-    def __init__(self, port="/dev/ttyUSB0", topic='/trisonica', baud=115200, rate=80):
-        baud = 115200
-        self.rate = 80 # rate to check/publish new data, Hz
-        print('Connecting to: ', port)
-        self.connection = serial.Serial(port, baud, timeout=0.01)
+    def __init__(self, port="/dev/ttyUSB0", topic='/trisonica', baud=115200, rate=400):
+        baud = baud
+        self.rate = rate # rate to check/publish new data, Hz
+
+        self.nodename = rospy.get_name().rstrip('/')
+        self.params = rospy.get_param(self.nodename, {})
+
+        # Set serial port name
+        if rospy.has_param(self.nodename + '/port'):
+            self.port = self.params['port']
+        else:
+            self.port = port
+
+        # Set topic name
+        if rospy.has_param(self.nodename + '/topic'):
+            self.topic = self.nodename + '/' + self.params['topic']
+        else:
+            self.topic = topic
+
+        # initilize msg
+        self.msg = trisonica_msg()
+
+        rospy.logwarn('Trisonica topic: ' + self.topic)
+
+        # Connect to serial port
+        rospy.logwarn('Connecting to: ' + self.port)
+        self.connection = serial.Serial(self.port, baud, timeout=0.01)
         self.connection.flush()
-        print('Connected.')
-        self.publisher = rospy.Publisher(topic, trisonica_msg, queue_size=10)
+        rospy.logwarn('Connected.')
+
+        # Define publisher
+        self.publisher = rospy.Publisher(self.topic, trisonica_msg, queue_size=10)
 
     def main(self):
-        msg = trisonica_msg()
-        rate = rospy.Rate(self.rate) # Hz, trisonica set to 40 Hz
+        msg = self.msg
+        rate = rospy.Rate(self.rate)
         while not rospy.is_shutdown():
             data = self.connection.readline()
+            #rospy.logwarn(data)
+            data = data.decode()
             if data is not None and len(data) > 10:
                 if 1: #data[0] == 'S':
                     msg.header.stamp.secs = rospy.Time.now().secs
@@ -28,55 +54,61 @@ class Trisonica(object):
                     try:
                         msg.speed       = float( data.split('S ')[1].lstrip().split(' ')[0] )
                     except:
-                        #msg.speed = np.nan 
+                        #msg.speed = np.nan
                         pass
 
                     try:
                         msg.speed2d       = float( data.split('S2 ')[1].lstrip().split(' ')[0] )
                     except:
-                        #msg.speed2d = np.nan  
+                        #msg.speed2d = np.nan
                         pass
 
                     try:
-                        msg.direction   = float( data.split('D ')[1].lstrip().split(' ')[0])
+                        msg.direction   = float( data.split(' D ')[1].lstrip().split(' ')[0])
                     except:
-                        #msg.direction = np.nan   
+                        #msg.direction = np.nan
+                        pass
+
+                    try:
+                        msg.vertdirection   = float( data.split('DV ')[1].lstrip().split(' ')[0])
+                    except:
+                        #msg.vertdirection = np.nan
                         pass
 
                     try:
                         msg.northsouth  = float( data.split('U ')[1].lstrip().split(' ')[0] )
                     except:
-                        #msg.northsouth = np.nan  
+                        #msg.northsouth = np.nan
                         pass
 
                     try:
-                        msg.westeast    = float( data.split('V ')[1].lstrip().split(' ')[0] )
+                        msg.westeast    = float( data.split(' V ')[1].lstrip().split(' ')[0] )
                     except:
-                        #msg.westeast = np.nan  
+                        #msg.westeast = np.nan
                         pass
 
                     try:
                         msg.updown      = float( data.split('W ')[1].lstrip().split(' ')[0] )
                     except:
-                        #msg.updown = np.nan  
+                        #msg.updown = np.nan
                         pass
 
                     try:
                         msg.temperature = float( data.split('T ')[1].lstrip().split(' ')[0] )
                     except:
-                        #msg.temperature = np.nan  
+                        #msg.temperature = np.nan
                         pass
 
                     try:
-                        msg.pressure = float( data.split('P ')[1].lstrip().split(' ')[0] )                
+                        msg.pressure = float( data.split('P ')[1].lstrip().split(' ')[0] )
                     except:
-                        #msg.pressure = np.nan  
+                        #msg.pressure = np.nan
                         pass
 
                     try:
-                        msg.humidity = float( data.split('H ')[1].lstrip().split(' ')[0] )                
+                        msg.humidity = float( data.split('H ')[1].lstrip().split(' ')[0] )
                     except:
-                        #msg.humidity = np.nan   
+                        #msg.humidity = np.nan
                         pass
 
                     try:
@@ -85,41 +117,38 @@ class Trisonica(object):
                         try:
                             msg.pitch = float( data.split('PI ')[1].lstrip().split(' ')[0] )
                         except:
-                            #msg.pitch = np.nan  
+                            #msg.pitch = np.nan
                             pass
 
                     try:
                         msg.roll = float( data.split('RO ')[1].lstrip().split(' ')[0] )
                     except:
-                        #msg.roll = np.nan   
+                        #msg.roll = np.nan
                         pass
 
                     try:
                         msg.heading = float( data.split('MD ')[1].lstrip().split(' ')[0] )
                     except:
-                        #msg.heading = np.nan   
+                        #msg.heading = np.nan
                         pass
 
                     try:
                         msg.levelx = float( data.split('AX ')[1].lstrip().split(' ')[0] )
                     except:
-                        #msg.levelx = np.nan   
+                        msg.levelx = np.nan
                         pass
 
                     try:
                         msg.levely = float( data.split('AY ')[1].lstrip().split(' ')[0] )
                     except:
-                        #msg.levely = np.nan   
+                        #msg.levely = np.nan
                         pass
 
                     try:
                         msg.levelz = float( data.split('AZ ')[1].lstrip().split(' ')[0] )
                     except:
-                        #msg.levelz = np.nan   
+                        #msg.levelz = np.nan
                         pass
-
-
-
 
                     self.publisher.publish(msg)
 

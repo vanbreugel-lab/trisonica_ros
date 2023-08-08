@@ -7,7 +7,7 @@ from optparse import OptionParser
 from trisonica_ros.msg import trisonica_msg
 
 class Trisonica(object):
-    def __init__(self, port="/dev/ttyUSB0", topic='/trisonica', baud=115200, rate=400):
+    def __init__(self, port="/dev/ttyUSB1", topic='/trisonica', baud=115200, rate=400):
         baud = baud
         self.rate = rate # rate to check/publish new data, Hz
 
@@ -159,7 +159,7 @@ class Trisonica(object):
 if __name__ == '__main__':
 
     parser = OptionParser()
-    parser.add_option("--port", type="str", dest="port", default='/dev/ttyUSB0',
+    parser.add_option("--port", type="str", dest="port", default='/dev/ttyUSB1',
                         help="port to which trisonica is connected")
     parser.add_option("--topic", type="str", dest="topic", default='/trisonica',
                         help="rostopic to publish to")
