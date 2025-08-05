@@ -1,0 +1,7 @@
+rosbag record -o linear_no_turn_up_5 /trisonica /trisonica_body_level /trisonica_global /mavros/local_position/pose /mavros/rc/in /mavros/rc/out /mavros/imu/data /mavros/imu/data_raw /camera/color/image_raw
+rosbag record -o walk_test /trisonica /trisonica_body_level /trisonica_global /mavros/local_position/pose /mavros/rc/in /mavros/rc/out /mavros/imu/data /mavros/imu/data_raw /camera/color/image_raw
+rosbag record -o con_vel /trisonica /trisonica_body_level /trisonica_global /mavros/local_position/pose /mavros/rc/in /mavros/rc/out /mavros/imu/data /mavros/imu/data_raw /camera/color/image_raw
+rosbag record -o con_vel_con_yaw /trisonica /trisonica_body_level /trisonica_global /mavros/local_position/pose /mavros/rc/in /mavros/rc/out /mavros/imu/data /mavros/imu/data_raw /camera/color/image_raw
+rosbag record -o hover /trisonica /trisonica_body_level /trisonica_global /mavros/local_position/pose /mavros/rc/in /mavros/rc/out /mavros/imu/data /mavros/imu/data_raw /camera/color/image_raw
+rosbag record -o arunava_ds2 /trisonica /trisonica_body_level /trisonica_global /mavros/local_position/pose /mavros/rc/in /mavros/rc/out /mavros/imu/data /mavros/imu/data_raw /camera/color/image_raw
+rosbag record -o acc /trisonica /trisonica_body_level /trisonica_global /mavros/local_position/pose /mavros/rc/in /mavros/rc/out /mavros/imu/data /mavros/imu/data_raw /camera/color/image_raw
